@@ -3,6 +3,7 @@
 // 请求拦截器，响应拦截器
 
 import axios from 'axios'
+import { getToken } from './token'
 
 
 
@@ -13,6 +14,12 @@ const request = axios.create({
 
 // 添加请求拦截器
 request.interceptors.request.use((config) => {
+
+  //操作 config
+  const token = getToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 }, (error) => {
   return Promise.reject(error)
