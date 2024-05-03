@@ -5,12 +5,15 @@ import {request} from '@/utils'
 const userStore = createSlice({
   name:'user',
   initialState: {
-    token: ''
+    token: localStorage.getItem('token_key') || ''
   },
   // reducers 对象包含了一系列的 reducer 函数，这些函数定义了如何更新状态
   reducers: {
     setToken(state, action) {
       state.token = action.payload
+
+      // localStorage存一份
+      localStorage.setItem('token_key', action.payload)
     }
   }
 })
