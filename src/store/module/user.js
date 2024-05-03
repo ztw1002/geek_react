@@ -1,11 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {request} from '@/utils' 
+import {setToken as _setToken, getToken} from '@/utils'
 
 // 创建一个名为 user 的 slice，包含一个 初始状态 和一个 reducers 对象
 const userStore = createSlice({
   name:'user',
   initialState: {
-    token: localStorage.getItem('token_key') || ''
+    token: getToken() || ''
   },
   // reducers 对象包含了一系列的 reducer 函数，这些函数定义了如何更新状态
   reducers: {
@@ -13,7 +14,7 @@ const userStore = createSlice({
       state.token = action.payload
 
       // localStorage存一份
-      localStorage.setItem('token_key', action.payload)
+      _setToken(action.payload)
     }
   }
 })
