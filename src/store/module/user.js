@@ -6,7 +6,8 @@ import {setToken as _setToken, getToken} from '@/utils'
 const userStore = createSlice({
   name:'user',
   initialState: {
-    token: getToken() || ''
+    token: getToken() || '',
+    userInfo: {}
   },
   // reducers 对象包含了一系列的 reducer 函数，这些函数定义了如何更新状态
   reducers: {
@@ -15,13 +16,16 @@ const userStore = createSlice({
 
       // localStorage存一份
       _setToken(action.payload)
+    },
+    setUserInfo(state, action) {
+      state.userInfo = action.payload
     }
   }
 })
 
 // setToken 是 createSlice 自动生成的 action creator
 // 解构出 actionCreator
-const {setToken} = userStore.actions
+const {setToken, setUserInfo} = userStore.actions
 
 // 获取reducer函数
 const userReducer = userStore.reducer
@@ -36,5 +40,13 @@ const fetchLogin = (loginForm) => {
   }
 }
 
-export {setToken, fetchLogin}
+// 获取个人信息异步方法
+const fetchUserInfo = () => {
+  return async (dispatch) => {
+    const res = await request.get('/user/profile')
+    dispatch(setUserInfo(res.data))
+  }
+}
+
+export {setToken, fetchLogin, fetchUserInfo}
 export default userReducer
