@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {request} from '@/utils' 
 import {setToken as _setToken, getToken} from '@/utils'
+import { removeToken } from '@/utils'
 
 // 创建一个名为 user 的 slice，包含一个 初始状态 和一个 reducers 对象
 const userStore = createSlice({
@@ -19,13 +20,18 @@ const userStore = createSlice({
     },
     setUserInfo(state, action) {
       state.userInfo = action.payload
+    },
+    clearUserInfo(state) {
+      state.token = ''
+      state.userInfo = {}
+      removeToken()
     }
   }
 })
 
 // setToken 是 createSlice 自动生成的 action creator
 // 解构出 actionCreator
-const {setToken, setUserInfo} = userStore.actions
+const {setToken, setUserInfo, clearUserInfo} = userStore.actions
 
 // 获取reducer函数
 const userReducer = userStore.reducer
@@ -48,5 +54,5 @@ const fetchUserInfo = () => {
   }
 }
 
-export {setToken, fetchLogin, fetchUserInfo}
+export {setToken, fetchLogin, fetchUserInfo, clearUserInfo}
 export default userReducer
