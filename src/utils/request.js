@@ -3,7 +3,8 @@
 // 请求拦截器，响应拦截器
 
 import axios from 'axios'
-import { getToken } from './token'
+import { getToken, removeToken } from './token'
+import router from '@/router'
 
 
 
@@ -29,6 +30,12 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use((response) => {
   return response.data
 }, (error) => {
+  // 监控 401
+  if (error.response.status === 401) {
+    removeToken()
+    router.navigate('/login')
+    window.location.reload()
+  }
   return Promise.reject(error)
 })
 
