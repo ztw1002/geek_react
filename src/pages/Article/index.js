@@ -10,6 +10,8 @@ import img404 from '@/assets/error.png'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import './index.scss'
 import { useChannel } from '@/hooks/useChannel'
+import { getArticleListAPI } from '@/apis/article'
+import { useEffect, useState } from 'react'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
@@ -87,6 +89,19 @@ const Article = () => {
       }
   ]
 
+  const [list, setList] = useState([])
+  const [count, setCount] = useState(0)
+
+
+  useEffect(() => {
+    async function getList() {
+      const res = await getArticleListAPI()
+      setList(res.data.results)
+      setCount(res.data.total_count)
+    }
+    getList()
+  },[])
+
   return (
     <div>
       <Card
@@ -135,8 +150,8 @@ const Article = () => {
       </Card>
       
       {/* 表格区域 */}
-      <Card title={`根据筛选条件共查询到 count 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={data} />
+      <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
+        <Table rowKey="id" columns={columns} dataSource={list} />
       </Card>
     </div>
   )
