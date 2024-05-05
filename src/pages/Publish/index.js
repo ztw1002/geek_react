@@ -7,40 +7,34 @@ import {
   Input,
   Upload,
   Space,
-  Select
+  Select,
+  message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { useEffect, useState } from 'react'
-import { createArticleAPI, getChannelAPI } from '@/apis/article'
+import { useState } from 'react'
+import { createArticleAPI } from '@/apis/article'
+import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
 
 const Publish = () => {
-  const [channelList, setChannelList] = useState([])
-
-  useEffect(() => {
-    // 封装函数，调用接口，调用函数
-    const getChannelList = async () => {
-      const res = await getChannelAPI()
-      setChannelList(res.data.channels)
-    }
-    getChannelList()
-  },[])
+  const { channelList } = useChannel()
 
   // 提交表单
   const onFinish = (formValue) => {
     // 按照接口文档的格式处理收集到的数据
+    if(imageList.length !== imageType) return message.warning('图片数量不匹配')
     const {title, content, channel_id} = formValue
     const reqData = {
       title,
       content,
       cover: {
-        type: 0,
-        images: []
+        type: imageType,  //  封面模式
+        images: imageList.map(item => item.response.data.url) // 图片列表
       },
       channel_id: ''
     }
@@ -117,6 +111,7 @@ const Publish = () => {
                 showUploadList
                 action="http://geek.itheima.net/v1_0/upload"
                 onChange={onChange}
+                maxCount={imageType}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
