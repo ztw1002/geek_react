@@ -122,8 +122,8 @@ const Article = () => {
       ...reqData,
       channel_id: formValue.channel_id,
       status: formValue.status,
-      begin_pubdate: formValue.data[0].format("YYYY-MM-DD"),
-      end_pubdate: formValue.data[1].format("YYYY-MM-DD"),
+      begin_pubdate: formValue.date[0].format("YYYY-MM-DD"),
+      end_pubdate: formValue.date[1].format("YYYY-MM-DD"),
     })
 
     // 重新拉取文章列表 复用
