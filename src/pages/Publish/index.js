@@ -48,6 +48,14 @@ const Publish = () => {
     // 调用接口
     createArticleAPI(reqData)
   }
+
+    // 上传回调
+    const[imageList, setImageList] = useState([])
+    const onChange = (value) => {
+      setImageList(value.fileList)
+    }
+
+
   return (
     <div className="publish">
       <Card
@@ -99,6 +107,8 @@ const Publish = () => {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList
+              action="http://geek.itheima.net/v1_0/upload"
+              onChange={onChange}
             >
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
